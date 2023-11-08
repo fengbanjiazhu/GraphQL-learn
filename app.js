@@ -4,13 +4,13 @@ const { graphqlHTTP } = require("express-graphql");
 const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
 
+const Event = require("./models/event");
+
 const app = express();
 
 app.use(express.json({ limit: "10kb" }));
 
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
-
-const events = [];
 
 app.use(
   "/graphql",
@@ -46,20 +46,24 @@ app.use(
     `),
     // controller || logic
     rootValue: {
-      events: () => {
-        return events;
+      events: async () => {
+        const allEvents = await Event.find();
+        return allEvents;
       },
-      createEvent: (args) => {
+      createEvent: async (args) => {
         const { title, description, price, date } = args.eventInput;
-        const event = {
-          _id: Math.random().toString(),
-          title,
-          description,
-          price: price * 1,
-          date,
-        };
-        events.push(event);
-        return event;
+        try {
+          const newEvent = await Event.create({
+            title,
+            description,
+            price,
+            date: new Date(date),
+          });
+
+          return newEvent;
+        } catch (error) {
+          console.log(error);
+        }
       },
     },
     graphiql: true,
