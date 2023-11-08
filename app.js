@@ -20,25 +20,35 @@ app.use(express.json({ limit: "10kb" }));
 
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
-// checking req.query middleware
-// app.use(function (req, res, next) {
-//   console.log("Query:", req.query);
-//   console.log("Params:", req.params);
-//   console.log("Body:", req.body);
-//   next();
-// });
+const events = [];
 
 app.use(
   "/graphql",
   graphqlHTTP({
     // routes
     schema: buildSchema(`
+      type Event {
+        _id: ID!
+        title: String!
+        description: String!
+        price: Float!
+        date: String!
+      }
+      input EventInput {
+        title: String!
+        description: String!
+        price: Float!
+        date: String!
+      }
+
       type RootQuery {
-        events: [String!]!
+        events: [Event!]!
       }
+
       type RootMutation {
-        createEvent(name: String): String
+        createEvent(eventInput: EventInput): Event
       }
+
       schema {
         query: RootQuery
         mutation: RootMutation
@@ -47,11 +57,19 @@ app.use(
     // controller || logic
     rootValue: {
       events: () => {
-        return ["Romantic Cooking", "Sailing", "All Night Coding"];
+        return events;
       },
       createEvent: (args) => {
-        const { name } = args;
-        return name;
+        const { title, description, price, date } = args.eventInput;
+        const event = {
+          _id: Math.random().toString(),
+          title,
+          description,
+          price: price * 1,
+          date,
+        };
+        events.push(event);
+        return event;
       },
     },
     graphiql: true,
