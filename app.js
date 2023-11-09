@@ -65,6 +65,7 @@ app.use(
         return allEvents;
       },
       createEvent: async (args) => {
+        console.log(args);
         const { title, description, price, date } = args.eventInput;
         try {
           const newEvent = await Event.create({
@@ -72,6 +73,11 @@ app.use(
             description,
             price,
             date: new Date(date),
+            creator: "654c7da96697c3aa614d4662",
+          });
+
+          await User.findByIdAndUpdate("654c7da96697c3aa614d4662", {
+            $push: { createEvents: newEvent._id },
           });
 
           return newEvent;
