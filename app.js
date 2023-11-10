@@ -13,6 +13,8 @@ app.use(express.json({ limit: "10kb" }));
 
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
+const user = (userId) => {};
+
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -24,12 +26,14 @@ app.use(
         description: String!
         price: Float!
         date: String!
+        creator: User
       }
 
       type User {
         _id: ID!
         email: String!
         password: String
+        createEvents:[Event!]
       }
 
       input EventInput {
@@ -65,7 +69,6 @@ app.use(
         return allEvents;
       },
       createEvent: async (args) => {
-        console.log(args);
         const { title, description, price, date } = args.eventInput;
         try {
           const newEvent = await Event.create({
