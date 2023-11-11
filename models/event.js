@@ -32,6 +32,14 @@ eventSchema.pre(/^find/, function (next) {
   next();
 });
 
+eventSchema.post(/^find/, function (docs, next) {
+  docs.forEach((doc) => {
+    doc._doc.date = new Date(doc._doc.date).toISOString();
+  });
+
+  next();
+});
+
 const Event = mongoose.model("Event", eventSchema);
 
 module.exports = Event;
