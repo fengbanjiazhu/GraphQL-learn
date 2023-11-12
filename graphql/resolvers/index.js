@@ -3,8 +3,21 @@ const Event = require("../../models/event");
 
 module.exports = {
   events: async () => {
-    const allEvents = await Event.find();
-    return allEvents;
+    try {
+      const allEvents = await Event.find();
+      return allEvents;
+    } catch (error) {
+      return error;
+    }
+  },
+  user: async (args) => {
+    try {
+      const { userID } = args;
+      const user = await User.findById(userID);
+      return user;
+    } catch (error) {
+      return error;
+    }
   },
   createEvent: async (args) => {
     const { title, description, price, date } = args.eventInput;
