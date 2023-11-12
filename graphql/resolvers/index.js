@@ -1,7 +1,9 @@
 const User = require("../../models/user");
 const Event = require("../../models/event");
+const Booking = require("../../models/booking");
 
 module.exports = {
+  // query
   events: async () => {
     try {
       const allEvents = await Event.find();
@@ -19,6 +21,16 @@ module.exports = {
       return error;
     }
   },
+  bookings: async () => {
+    try {
+      const allBookings = await Booking.find();
+      return allBookings;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  // mutation
   createEvent: async (args) => {
     const { title, description, price, date } = args.eventInput;
     try {
@@ -56,4 +68,18 @@ module.exports = {
       return error;
     }
   },
+
+  bookEvent: async (args) => {
+    const { eventID } = args;
+    const foundEvent = await Event.findById(eventID);
+    const booking = await Booking.create({
+      user: "654c7da96697c3aa614d4662",
+      event: foundEvent,
+    });
+
+    return booking;
+  },
+
+  // bookEvent(eventID: ID!): Booking!
+  // cancelBooking(bookingID: ID!): Event!
 };

@@ -33,9 +33,13 @@ eventSchema.pre(/^find/, function (next) {
 });
 
 eventSchema.post(/^find/, function (docs, next) {
-  docs.forEach((doc) => {
-    doc._doc.date = new Date(doc._doc.date).toISOString();
-  });
+  if (Array.isArray(docs)) {
+    docs.forEach((doc) => {
+      doc._doc.date = new Date(doc._doc.date).toISOString();
+    });
+  } else {
+    docs._doc.date = new Date(docs._doc.date).toISOString();
+  }
 
   next();
 });
