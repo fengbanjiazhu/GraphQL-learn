@@ -43,7 +43,8 @@ input UserInput {
 
 type RootQuery {
   events: [Event!]!
-  user(userID: String!): User
+  singleEvent(eventID: ID!): Event!
+  user(userID: ID!): User
   bookings: [Booking!]!
 }
 
