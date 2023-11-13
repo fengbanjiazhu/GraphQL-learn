@@ -80,6 +80,19 @@ module.exports = {
     return booking;
   },
 
+  cancelBooking: async (args) => {
+    try {
+      const { bookingID } = args;
+      const deletedBooking = await Booking.findByIdAndDelete(bookingID);
+
+      console.log(deletedBooking);
+
+      return { message: "Successful canceled booking" };
+    } catch (error) {
+      return { message: `There are something went wrong: ${error}` };
+    }
+  },
+
   // bookEvent(eventID: ID!): Booking!
   // cancelBooking(bookingID: ID!): Event!
 };

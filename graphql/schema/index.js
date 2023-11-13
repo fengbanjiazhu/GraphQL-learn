@@ -25,6 +25,10 @@ type User {
   createEvents:[Event!]
 }
 
+type Response {
+  message: String!
+}
+
 input EventInput {
   title: String!
   description: String!
@@ -47,7 +51,7 @@ type RootMutation {
   createEvent(eventInput: EventInput): Event
   createUser(userInput: UserInput): User
   bookEvent(eventID: ID!): Booking!
-  cancelBooking(bookingID: ID!): Event!
+  cancelBooking(bookingID: ID!): Response!
 }
 
 schema {

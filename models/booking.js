@@ -14,6 +14,12 @@ const bookingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+bookingSchema.pre(/^find/, function (next) {
+  this.populate("event");
+  this.populate("user");
+  next();
+});
+
 bookingSchema.post(/^find/, function (docs, next) {
   if (Array.isArray(docs)) {
     docs.forEach((doc) => {
