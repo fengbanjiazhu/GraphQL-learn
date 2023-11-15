@@ -22,7 +22,8 @@ module.exports = {
   },
 
   // mutation
-  createEvent: async (args) => {
+  createEvent: async (args, req) => {
+    if (!req.isAuth) throw new Error("You are not logged in, please login first");
     const { title, description, price, date } = args.eventInput;
     try {
       const newEvent = await Event.create({
@@ -39,7 +40,6 @@ module.exports = {
 
       return newEvent;
     } catch (error) {
-      console.log(error);
       return error;
     }
   },

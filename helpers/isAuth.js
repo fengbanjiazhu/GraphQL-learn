@@ -3,7 +3,10 @@ const User = require("../models/user");
 
 module.exports = async (req, res, next) => {
   let token = req.headers.authorization;
-  if (!token || !token.startsWith("Bearer")) return next();
+  if (!token || !token.startsWith("Bearer")) {
+    req.isAuth = false;
+    return next();
+  }
 
   token = token.split(" ")[1];
 
@@ -11,7 +14,10 @@ module.exports = async (req, res, next) => {
   console.log(result);
 
   const currentUser = await User.findById(result.id);
-  if (!currentUser) return next();
+  if (!currentUser) {
+    req.isAuth = false;
+    return next();
+  }
 
   // Grand Access to Protected Route
   req.user = currentUser;

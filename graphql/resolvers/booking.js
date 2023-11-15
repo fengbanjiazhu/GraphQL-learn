@@ -3,7 +3,6 @@ const Booking = require("../../models/booking");
 
 module.exports = {
   // query
-
   bookings: async () => {
     try {
       const allBookings = await Booking.find();
@@ -14,8 +13,9 @@ module.exports = {
   },
 
   // mutation
+  bookEvent: async (args, req) => {
+    if (!req.isAuth) throw new Error("You are not logged in, please login first");
 
-  bookEvent: async (args) => {
     try {
       const { eventID } = args;
       const foundEvent = await Event.findById(eventID);
@@ -40,7 +40,4 @@ module.exports = {
       return { message: `There are something went wrong: ${error}` };
     }
   },
-
-  // bookEvent(eventID: ID!): Booking!
-  // cancelBooking(bookingID: ID!): Event!
 };
