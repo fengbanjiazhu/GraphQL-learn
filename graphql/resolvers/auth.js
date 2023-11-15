@@ -35,6 +35,7 @@ module.exports = {
 
     const token = signToken(userID);
 
+    console.log(token);
     return { token, tokenExpiration: 7 * 24 };
   },
   // mutation

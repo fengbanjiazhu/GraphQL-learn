@@ -5,12 +5,15 @@ const mongoose = require("mongoose");
 
 const graphqlSchema = require("./graphql/schema/index");
 const graphqlResolvers = require("./graphql/resolvers/index");
+const isAuth = require("./helpers/isAuth");
 
 const app = express();
 
 app.use(express.json({ limit: "10kb" }));
 
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+
+app.use(isAuth);
 
 app.use(
   "/graphql",
