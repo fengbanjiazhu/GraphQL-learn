@@ -11,7 +11,6 @@ module.exports = async (req, res, next) => {
   token = token.split(" ")[1];
 
   const result = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(result);
 
   const currentUser = await User.findById(result.id);
   if (!currentUser) {
@@ -21,5 +20,7 @@ module.exports = async (req, res, next) => {
 
   // Grand Access to Protected Route
   req.user = currentUser;
+  req.isAuth = true;
+
   next();
 };

@@ -1,4 +1,5 @@
 const Event = require("../../models/event");
+const User = require("../../models/user");
 
 module.exports = {
   // query
@@ -24,6 +25,8 @@ module.exports = {
   // mutation
   createEvent: async (args, req) => {
     if (!req.isAuth) throw new Error("You are not logged in, please login first");
+
+    const { _id: userId } = req.user;
     const { title, description, price, date } = args.eventInput;
     try {
       const newEvent = await Event.create({
@@ -31,10 +34,10 @@ module.exports = {
         description,
         price,
         date: new Date(date),
-        creator: "654c7da96697c3aa614d4662",
+        creator: userId,
       });
 
-      await User.findByIdAndUpdate("654c7da96697c3aa614d4662", {
+      await User.findByIdAndUpdate(userId, {
         $push: { createEvents: newEvent._id },
       });
 
