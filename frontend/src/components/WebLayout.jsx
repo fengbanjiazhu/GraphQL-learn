@@ -1,6 +1,8 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
+import NavBar from "./ui/NavBar";
+
 const { Header, Content, Footer } = Layout;
 
 const WebLayout = () => {
@@ -13,22 +15,12 @@ const WebLayout = () => {
         }}
       >
         <div className="demo-logo" />
-        <Menu
-          theme="light"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={new Array(15).fill(null).map((_, index) => {
-            const key = index + 1;
-            return {
-              key,
-              label: `nav ${key}`,
-            };
-          })}
-        />
+        <NavBar />
       </Header>
       <Content
         style={{
           padding: "0 50px",
+          minHeight: "100vh",
         }}
       >
         <Outlet />
