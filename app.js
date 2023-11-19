@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const { graphqlHTTP } = require("express-graphql");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const graphqlSchema = require("./graphql/schema/index");
 const graphqlResolvers = require("./graphql/resolvers/index");
@@ -9,7 +10,20 @@ const isAuth = require("./helpers/isAuth");
 
 const app = express();
 
-app.use(express.json({ limit: "10kb" }));
+app.use(
+  cors({
+    origin: "*",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
+);
+
+// app.use((req, res, next) => {
+//   console.log(req);
+//   next();
+// });
+
+app.use(express.json());
 
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 

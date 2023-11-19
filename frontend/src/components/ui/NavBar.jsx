@@ -15,6 +15,11 @@ const items = [
     icon: <AppstoreOutlined />,
   },
   {
+    label: "Sign Up",
+    key: "signup",
+    icon: <AppstoreOutlined />,
+  },
+  {
     label: "Events",
     key: "events",
     icon: <AppstoreOutlined />,
@@ -39,6 +44,7 @@ const NavBar = () => {
     <Menu
       style={{
         width: "100%",
+        justifyContent: "center",
       }}
       onClick={onClick}
       theme="dark"

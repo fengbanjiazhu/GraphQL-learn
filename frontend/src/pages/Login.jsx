@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Form, Input } from "antd";
+import { login } from "../API/dataFetcher";
 
 const formItemLayout = {
   labelCol: {
@@ -31,11 +32,15 @@ const tailFormItemLayout = {
     },
   },
 };
+
 function Login() {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    const { email, password } = values;
+    if (!email.trim() || !password.trim()) return alert("password or email can not be empty");
+
+    login(email, password);
   };
 
   return (
@@ -46,7 +51,6 @@ function Login() {
       onFinish={onFinish}
       style={{
         maxWidth: 1000,
-        width: "40%",
         margin: "0 auto",
       }}
       scrollToFirstError
@@ -83,90 +87,14 @@ function Login() {
       </Form.Item>
 
       <Form.Item
-        name="confirm"
-        label="Confirm Password"
-        dependencies={["password"]}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: "Please confirm your password!",
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue("password") === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error("The new password that you entered do not match!"));
-            },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item
-        name="nickname"
-        label="Nickname"
-        tooltip="What do you want others to call you?"
-        rules={[
-          {
-            required: true,
-            message: "Please input your nickname!",
-            whitespace: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        name="phone"
-        label="Phone Number"
-        rules={[
-          {
-            required: true,
-            message: "Please input your phone number!",
-          },
-        ]}
-      >
-        {/* <Input
-          addonBefore={prefixSelector}
-          style={{
-            width: "100%",
-          }}
-        /> */}
-      </Form.Item>
-
-      <Form.Item label="Captcha" extra="We must make sure that your are a human.">
-        <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              name="captcha"
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: "Please input the captcha you got!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Button>Get captcha</Button>
-          </Col>
-        </Row>
-      </Form.Item>
-
-      <Form.Item
         name="agreement"
         valuePropName="checked"
         rules={[
           {
             validator: (_, value) =>
-              value ? Promise.resolve() : Promise.reject(new Error("Should accept agreement")),
+              value
+                ? Promise.resolve()
+                : Promise.reject(new Error("You must accept agreement to continue")),
           },
         ]}
         {...tailFormItemLayout}
@@ -177,7 +105,7 @@ function Login() {
       </Form.Item>
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit">
-          Register
+          Login
         </Button>
       </Form.Item>
     </Form>
