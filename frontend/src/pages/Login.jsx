@@ -36,11 +36,13 @@ const tailFormItemLayout = {
 function Login() {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     const { email, password } = values;
     if (!email.trim() || !password.trim()) return alert("password or email can not be empty");
 
-    login(email, password);
+    const res = await login(email, password);
+    const { token } = res.data.login;
+    console.log(token);
   };
 
   return (

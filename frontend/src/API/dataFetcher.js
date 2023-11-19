@@ -4,7 +4,7 @@ export const login = async (email, password) => {
   const requestBody = {
     query: `
       query {
-        login(userInput: {email: "${email}", password: "${password}"}){
+        login(email: "${email}", password: "${password}"){
           token
         }
       }
@@ -18,8 +18,12 @@ export const login = async (email, password) => {
       },
       body: JSON.stringify(requestBody),
     });
-    // if (!res || !res.ok) throw new Error("There is an error when connecting server");
-    console.log(res);
+    // console.log(res);
+    if (!res) throw new Error("There is an error when connecting server");
+    const data = await res.json();
+    if (data.errors) throw new Error(data.errors[0].message);
+
+    return data;
   } catch (error) {
     console.log(error);
   }
@@ -44,8 +48,9 @@ export const signUp = async (email, password) => {
       },
       body: JSON.stringify(requestBody),
     });
-    if (!res || !res.ok) throw new Error("There is an error when connecting server");
+    if (!res) throw new Error("There is an error when connecting server");
     const data = await res.json();
+    if (data.errors.length > 0) throw new Error(data.errors[0].message);
 
     return data;
   } catch (error) {

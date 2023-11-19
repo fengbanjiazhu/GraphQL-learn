@@ -35,10 +35,9 @@ const tailFormItemLayout = {
 function Signup() {
   const [form] = Form.useForm();
 
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     const { email, password } = values;
-    const data = await signUp(email, password);
-    console.log(data);
+    signUp(email, password);
   };
 
   return (

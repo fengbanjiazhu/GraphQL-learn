@@ -25,18 +25,21 @@ module.exports = {
   },
 
   login: async (args) => {
-    const { email, password: typedInPassword } = args;
-    const currentUser = await User.findOne({ email });
-    if (!currentUser) throw new Error("User does not exist");
+    try {
+      const { email, password: typedInPassword } = args;
+      const currentUser = await User.findOne({ email });
+      if (!currentUser) throw new Error("User does not exist");
 
-    const { password: dbSavedPassword, _id: userID } = currentUser;
-    const correctPassword = await comparePassword(typedInPassword, dbSavedPassword);
-    if (!correctPassword) throw new Error("Wrong password, please try again");
+      const { password: dbSavedPassword, _id: userID } = currentUser;
+      const correctPassword = await comparePassword(typedInPassword, dbSavedPassword);
+      if (!correctPassword) throw new Error("Wrong password, please try again");
 
-    const token = signToken(userID);
+      const token = signToken(userID);
 
-    console.log(token);
-    return { token, tokenExpiration: 7 * 24 };
+      return { token, tokenExpiration: 7 * 24 };
+    } catch (error) {
+      return error;
+    }
   },
   // mutation
 
