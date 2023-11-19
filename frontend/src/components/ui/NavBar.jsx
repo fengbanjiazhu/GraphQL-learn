@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AppstoreOutlined, MailOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 
@@ -26,13 +26,27 @@ const items = [
   },
 ];
 const NavBar = () => {
-  const [current, setCurrent] = useState("home");
+  const location = useLocation();
+  const currentPath = location.pathname.slice(1);
+  const [current, setCurrent] = useState(currentPath === "" ? "home" : currentPath);
   const navigate = useNavigate();
+
   const onClick = (e) => {
     setCurrent(e.key);
     navigate(e.key);
   };
-  return <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />;
+  return (
+    <Menu
+      style={{
+        width: "100%",
+      }}
+      onClick={onClick}
+      theme="dark"
+      selectedKeys={[current]}
+      mode="horizontal"
+      items={items}
+    />
+  );
 };
 
 export default NavBar;

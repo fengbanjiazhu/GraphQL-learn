@@ -12,6 +12,7 @@ const WebLayout = () => {
         style={{
           display: "flex",
           alignItems: "center",
+          marginBottom: "20px",
         }}
       >
         <div className="demo-logo" />
