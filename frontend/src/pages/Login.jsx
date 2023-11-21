@@ -41,6 +41,9 @@ function Login() {
     if (!email.trim() || !password.trim()) return alert("password or email can not be empty");
 
     const res = await login(email, password);
+
+    if (res.error) return alert(res.error.message);
+
     const { token } = res.data.login;
     console.log(token);
   };
